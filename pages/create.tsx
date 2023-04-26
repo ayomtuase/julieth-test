@@ -1,21 +1,21 @@
 import addUserDoc from "@/src/addUser";
+import logo from "@/src/assets/images/logo.svg";
 import { auth } from "@/src/firebase";
 import { emailRegex } from "@/src/utils";
 import { FirebaseError } from "firebase/app";
-import logo from "@/src/assets/images/logo.svg";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
-import { ImSpinner8 } from "react-icons/im";
 import { FaGoogle } from "react-icons/fa";
-import Link from "next/link";
-
+import { ImSpinner8 } from "react-icons/im";
 interface RegistrationForm {
   email: string;
   password: string;
@@ -26,6 +26,8 @@ export default function Home() {
   const googleAuthProvider = new GoogleAuthProvider();
   const [user, authLoading] = useAuthState(auth);
   const [authErrorMesage, setAuthErrorMessage] = useState("");
+
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -33,6 +35,12 @@ export default function Home() {
     reset,
     formState: { errors },
   } = useForm<RegistrationForm>();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [user, router]);
 
   const onSubmit = async (data: RegistrationForm) => {
     try {
@@ -44,6 +52,7 @@ export default function Home() {
       addUserDoc(userCredential?.user, setAuthErrorMessage);
       reset();
       setAuthErrorMessage("");
+      router.push("/dashboard");
     } catch (error: unknown) {
       setAuthErrorMessage((error as FirebaseError)?.message);
       return;
@@ -54,8 +63,8 @@ export default function Home() {
     try {
       const result = await signInWithPopup(auth, googleAuthProvider);
       const user = result.user;
-
       addUserDoc(user, setAuthErrorMessage);
+      router.push("/dashboard");
     } catch (error) {
       setAuthErrorMessage((error as FirebaseError)?.message);
       return;
@@ -120,7 +129,9 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col space-y-2 w-full mb-5 items-start">
-              <label htmlFor="confirmPassword" className="text-white">Password</label>
+              <label htmlFor="confirmPassword" className="text-white">
+                Password
+              </label>
               <input
                 type="password"
                 id="confirmPassword"
@@ -142,7 +153,7 @@ export default function Home() {
               )}
             </div>
 
-            {authErrorMesage ? <p>{authErrorMesage}</p> : null}
+            {authErrorMesage ? <p className="my-2 text-13px text-center" style={{ color: "red" }}>{authErrorMesage}</p> : null}
             <button
               type="submit"
               className="cursor-pointer bg-[linear-gradient(90deg,#9747ff,#fc00b5)] w-full text-white py-2.5 font-semibold text-xl"

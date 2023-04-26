@@ -5,11 +5,12 @@ import { FirebaseError } from "firebase/app";
 import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
-  signInWithPopup
+  signInWithPopup,
 } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
@@ -31,11 +32,20 @@ export default function Home() {
     formState: { errors },
   } = useForm<LoginForm>();
 
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [user, router]);
+
   const onSubmit = async (data: LoginForm) => {
     try {
       await signInWithEmailAndPassword(auth, data?.email, data?.password);
       reset();
       setAuthErrorMessage("");
+      router.push("/dashboard");
     } catch (error: unknown) {
       setAuthErrorMessage((error as FirebaseError)?.message);
       return;
@@ -45,6 +55,7 @@ export default function Home() {
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleAuthProvider);
+      router.push("/dashboard");
     } catch (error) {
       setAuthErrorMessage((error as FirebaseError)?.message);
       return;
@@ -107,7 +118,7 @@ export default function Home() {
                 </span>
               )}
             </div>
-            {authErrorMesage ? <p>{authErrorMesage}</p> : null}
+            {authErrorMesage ? <p className="my-2 text-13px text-center" style={{ color: "red" }}>{authErrorMesage}</p> : null}
             <button
               type="submit"
               className="cursor-pointer bg-[linear-gradient(90deg,#9747ff,#fc00b5)] w-full text-white py-2.5 font-semibold text-xl"
