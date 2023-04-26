@@ -72,7 +72,7 @@ export default function Home() {
   };
 
   return (
-    <main className="w-screen min-h-screen lg:h-screen flex flex-col-reverse lg:flex-row">
+    <main className="fixed w-screen min-h-screen lg:h-screen flex flex-col-reverse lg:flex-row">
       <div className="flex-grow py-7 w-full lg:w-1/2 flex justify-center flex-col h-full bg-[linear-gradient(90deg,#3b124f,#301d35)] px-3 md:px-[50px]">
         <Image src={logo} alt="Julieth" />
         <h3 className="font-bold text-2xl md:text-5xl md:text-[50px] text-[#cecece] mt-4">
@@ -80,8 +80,8 @@ export default function Home() {
         </h3>
       </div>
 
-      <div className="py-10 w-full lg:w-1/2 flex justify-center h-full bg-[#130f26]">
-        <div className="w-11/12 lg:w-1/2 flex flex-col items-center justify-center">
+      <div className="w-full lg:w-1/2 flex justify-center min-h-screen h-auto overflow-auto bg-[#130f26]">
+        <div className="py-10 w-11/12 lg:w-1/2 flex flex-col items-center justify-center">
           <h3 className="text-center bg-[linear-gradient(#009afc,#b658ff)] mb-5 bg-clip-text text-[40px] leading-normal font-bold fill-color-transparent">
             Sign up
           </h3>
