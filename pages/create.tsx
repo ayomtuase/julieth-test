@@ -72,7 +72,7 @@ export default function Home() {
   };
 
   return (
-    <main className="w-screen min-h-screen lg:h-screen flex flex-col-reverse md:flex-row">
+    <main className="w-screen min-h-screen lg:h-screen flex flex-col-reverse lg:flex-row">
       <div className="flex-grow py-7 w-full lg:w-1/2 flex justify-center flex-col h-full bg-[linear-gradient(90deg,#3b124f,#301d35)] px-3 md:px-[50px]">
         <Image src={logo} alt="Julieth" />
         <h3 className="font-bold text-2xl md:text-5xl md:text-[50px] text-[#cecece] mt-4">
@@ -147,7 +147,7 @@ export default function Home() {
                 })}
               />
               {errors?.confirmPassword && (
-                <span className="my-2 text-13px text-skin-red text-opacity-70">
+                <span className="my-2 text-13px" style={{ color: "red" }}>
                   {errors?.confirmPassword?.message}
                 </span>
               )}
